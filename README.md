@@ -13,18 +13,24 @@
 ## Build Environtment
 
 ```
-conda create -n syntaler python=3.12
-conda activate syntaler
+conda create -n syntalker python=3.12
+conda activate syntalker
 pip install -r requirements.txt
 ```
 
 
 ## Download Data
+
+We provide two ways for getting data, if you want to quickly run this project, you can choose `Download the parsed data directly`, or if you want do build datasets from raw data, you can choose `Download the original raw data`.
 - Download the parsed data directly
 ```
 bash bash_cospeech_download.sh
 ```
 
+- Download the original raw data
+```
+bash bash_raw_cospeech_download.sh
+```
 ## Eval
 
 ```
@@ -32,7 +38,7 @@ python test.py -c configs/diffusion_rvqvae_128.yaml
 ```
 
 # Acknowledgments
-Thanks to [EMAGE](https://github.com/PantoMatrix/PantoMatrix/tree/main/scripts/EMAGE_2024), [DiffuseStyleGesture](https://github.com/YoungSeng/DiffuseStyleGesture), [MDM](https://github.com/GuyTevet/motion-diffusion-model), [T2M-GPT](https://github.com/Mael-zys/T2M-GPT), [MoMask](https://github.com/EricGuo5513/momask-codes), [MotionCLIP](https://github.com/GuyTevet/MotionCLIP), [TMR](https://github.com/Mathux/TMR), [HumanML3D](https://github.com/EricGuo5513/HumanML3D), [OpenTMA](https://github.com/LinghaoChan/OpenTMA) , our code is partially borrowing from them.
+Thanks to [EMAGE](https://github.com/PantoMatrix/PantoMatrix/tree/main/scripts/EMAGE_2024), [DiffuseStyleGesture](https://github.com/YoungSeng/DiffuseStyleGesture), [MDM](https://github.com/GuyTevet/motion-diffusion-model), [T2M-GPT](https://github.com/Mael-zys/T2M-GPT), [MoMask](https://github.com/EricGuo5513/momask-codes), [MotionCLIP](https://github.com/GuyTevet/MotionCLIP), [TMR](https://github.com/Mathux/TMR), [HumanML3D](https://github.com/EricGuo5513/HumanML3D), [OpenTMA](https://github.com/LinghaoChan/OpenTMA) , our code is partially borrowing from them. Please check these useful repos.
 
 
 # 📖 Citation
