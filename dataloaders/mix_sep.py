@@ -83,7 +83,7 @@ class CustomDataset(Dataset):
         self.args = args
         self.loader_type = loader_type
 
-        self.rank = dist.get_rank()
+        self.rank = 0
         self.ori_stride = self.args.stride
         self.ori_length = self.args.pose_length
         self.alignment = [0,0] # for trinity
@@ -126,28 +126,8 @@ class CustomDataset(Dataset):
         self.max_audio_pre_len = math.floor(args.pose_length / args.pose_fps * self.args.audio_sr)
         if self.max_audio_pre_len > self.args.test_length*self.args.audio_sr: 
             self.max_audio_pre_len = self.args.test_length*self.args.audio_sr
-        
-        if args.word_rep is not None:
-            with open(f"{args.data_path}weights/vocab.pkl", 'rb') as f:
-                self.lang_model = pickle.load(f)
-                
         preloaded_dir = self.args.root_path + self.args.cache_path + loader_type + f"/{args.pose_rep}_cache"      
-        # if args.pose_norm:
-        #     # careful for rotation vectors
-        #     if not os.path.exists(args.data_path+args.mean_pose_path+f"{args.pose_rep.split('_')[0]}/bvh_mean.npy"):
-        #         self.calculate_mean_pose()
-        #     self.mean_pose = np.load(args.data_path+args.mean_pose_path+f"{args.pose_rep.split('_')[0]}/bvh_mean.npy")
-        #     self.std_pose = np.load(args.data_path+args.mean_pose_path+f"{args.pose_rep.split('_')[0]}/bvh_std.npy")
-        # if args.audio_norm:
-        #     if not os.path.exists(args.data_path+args.mean_pose_path+f"{args.audio_rep.split('_')[0]}/bvh_mean.npy"):
-        #         self.calculate_mean_audio()
-        #     self.mean_audio = np.load(args.data_path+args.mean_pose_path+f"{args.audio_rep.split('_')[0]}/npy_mean.npy")
-        #     self.std_audio = np.load(args.data_path+args.mean_pose_path+f"{args.audio_rep.split('_')[0]}/npy_std.npy")
-        # if args.facial_norm:
-        #     if not os.path.exists(args.data_path+args.mean_pose_path+f"{args.pose_rep.split('_')[0]}/bvh_mean.npy"):
-        #         self.calculate_mean_face()
-        #     self.mean_facial = np.load(args.data_path+args.mean_pose_path+f"{args.facial_rep}/json_mean.npy")
-        #     self.std_facial = np.load(args.data_path+args.mean_pose_path+f"{args.facial_rep}/json_std.npy")
+
         if self.args.beat_align:
             if not os.path.exists(args.data_path+f"weights/mean_vel_{args.pose_rep}.npy"):
                 self.calculate_mean_velocity(args.data_path+f"weights/mean_vel_{args.pose_rep}.npy")
@@ -158,6 +138,13 @@ class CustomDataset(Dataset):
         self.lmdb_env = lmdb.open(preloaded_dir, readonly=True, lock=False)
         with self.lmdb_env.begin() as txn:
             self.n_samples = txn.stat()["entries"] 
+            
+        self.norm = True
+        self.mean = np.load('./mean_std/beatx_2_330_mean.npy')
+        self.std = np.load('./mean_std/beatx_2_330_std.npy')
+        
+        self.trans_mean = np.load('./mean_std/beatx_2_trans_mean.npy')
+        self.trans_std = np.load('./mean_std/beatx_2_trans_std.npy')
 
     def load_amass(self,data):
         ## 这个是用来
@@ -498,7 +485,7 @@ class CustomDataset(Dataset):
                 if sample_pose.any() != None:
                     # filtering motion skeleton data
                     sample_pose, filtering_message = MotionPreprocessor(sample_pose).get()
-                    is_correct_motion = (sample_pose != [])
+                    is_correct_motion = (sample_pose is not None)
                     if is_correct_motion or disable_filtering:
                         sample_pose_list.append(sample_pose)
 
@@ -533,10 +520,17 @@ class CustomDataset(Dataset):
             key = "{:005}".format(idx).encode("ascii")
             sample = txn.get(key)
             sample = pickle.loads(sample)
-            tar_pose,  in_shape, vid, trans, trans_v = sample
-
+            tar_pose,  in_shape, vid, trans,trans_v = sample
+            tar_pose = torch.from_numpy(tar_pose).float()
+            tar_pose = rc.axis_angle_to_matrix(tar_pose.reshape(-1, 55, 3))
+            tar_pose = rc.matrix_to_rotation_6d(tar_pose).reshape(-1, 55*6)
+            
+            if self.norm:
+                tar_pose = (tar_pose - self.mean) / self.std
+                trans_v = (trans_v-self.trans_mean)/self.trans_std
+            
             if self.loader_type == "test":
-                tar_pose = torch.from_numpy(tar_pose).float()
+                tar_pose = tar_pose.float()
                 trans = torch.from_numpy(trans).float()
                 trans_v = torch.from_numpy(trans_v).float()
                 vid = torch.from_numpy(vid).float()
@@ -546,9 +540,9 @@ class CustomDataset(Dataset):
                 trans = torch.from_numpy(trans).reshape((trans.shape[0], -1)).float()
                 trans_v = torch.from_numpy(trans_v).reshape((trans_v.shape[0], -1)).float()
                 vid = torch.from_numpy(vid).reshape((vid.shape[0], -1)).float()
-                tar_pose = torch.from_numpy(tar_pose).reshape((tar_pose.shape[0], -1)).float()
-            return {"pose":tar_pose, "trans":trans,"trans_v":trans_v, "vid":vid}
-
+                tar_pose = tar_pose.reshape((tar_pose.shape[0], -1)).float()
+                tar_pose = torch.cat([tar_pose, trans_v], dim=1)
+            return tar_pose
          
 class MotionPreprocessor:
     def __init__(self, skeletons):
@@ -560,7 +554,7 @@ class MotionPreprocessor:
         assert (self.skeletons is not None)
 
         # filtering
-        if self.skeletons != []:
+        if self.skeletons is not None:
             if self.check_pose_diff():
                 self.skeletons = []
                 self.filtering_message = "pose"

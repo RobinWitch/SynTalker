@@ -16,7 +16,7 @@ def str2bool(v):
         raise configargparse.ArgumentTypeError('Boolean value expected.')
         
 
-def parse_args():
+def parse_args(config_path=None):
     """
     requirement for config
     1. command > yaml > default
@@ -286,8 +286,11 @@ def parse_args():
     # logging
     parser.add("--log_period", default=10, type=int)
   
-    
-    args = parser.parse_args()
+    if config_path:
+        args = parser.parse_args(["--config", config_path])
+    else:
+        args = parser.parse_args()
+
     idc = 0
     for i, char in enumerate(args.config):
         if char == "/": idc = i

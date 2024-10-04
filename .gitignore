@@ -3,3 +3,6 @@
 ckpt
 datasets
 outputs
+demo/Montreal-Forced-Aligner
+demo/test*
+demo/cache

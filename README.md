@@ -1,10 +1,11 @@
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/enabling-synergistic-full-body-control-in/gesture-generation-on-beat2)](https://paperswithcode.com/sota/gesture-generation-on-beat2?p=enabling-synergistic-full-body-control-in)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/enabling-synergistic-full-body-control-in-1/gesture-generation-on-beat2)](https://paperswithcode.com/sota/gesture-generation-on-beat2?p=enabling-synergistic-full-body-control-in-1)
 
 # 📝 Release Plans
 
 - [x] A simple and powerful cospeech model (corespond to paper Table2:SynTalker (w/o both) )
-- [ ] Training scripts (include training rvqvae and diffusion)
+- [x] Training scripts (include training rvqvae and diffusion)
+- [ ] A web demo
 - [ ] Our syntalker can recieve both speech and text input simultaneously
 - [ ] Training scripts (include data preprocessing, training rvqvae, text-motion alignspace and diffusion)
 
@@ -21,7 +22,7 @@ pip install -r requirements.txt
 
 ## Download Data
 
-We provide two ways for getting data, if you want to quickly run this project, you can choose `Download the parsed data directly`, or if you want do build datasets from raw data, you can choose `Download the original raw data`.
+We provide two ways for getting data, if you want to quickly run this project, you can choose `Download the parsed data directly`, or if you want to build datasets from raw data, you can choose `Download the original raw data`.
 - Download the parsed data directly
 ```
 bash bash_cospeech_download.sh
@@ -37,8 +38,35 @@ bash bash_raw_cospeech_download.sh
 python test.py -c configs/diffusion_rvqvae_128.yaml
 ```
 
+
+# 🔥 Training from scratch
+
+## 1. Train RVQVAE
+
+> Well, if your multiple gpus, we can parellel run these three command.
+
+```
+python rvq_beatx_train.py --batch-size 256 --lr 2e-4 --total-iter 300000 --lr-scheduler 200000 --nb-code 512 --code-dim 512 --down-t 2 --depth 3 --dilation-growth-rate 3 --out-dir outputs/rvqvae --vq-act relu --quantizer ema_reset --loss-vel 0.5 --recons-loss l1_smooth --exp-name RVQVAE --body_part upper
+```
+
+
+```
+python rvq_beatx_train.py --batch-size 256 --lr 2e-4 --total-iter 300000 --lr-scheduler 200000 --nb-code 512 --code-dim 512 --down-t 2 --depth 3 --dilation-growth-rate 3 --out-dir outputs/rvqvae --vq-act relu --quantizer ema_reset --loss-vel 0.5 --recons-loss l1_smooth --exp-name RVQVAE --body_part hands
+```
+
+```
+python rvq_beatx_train.py --batch-size 256 --lr 2e-4 --total-iter 300000 --lr-scheduler 200000 --nb-code 512 --code-dim 512 --down-t 2 --depth 3 --dilation-growth-rate 3 --out-dir outputs/rvqvae --vq-act relu --quantizer ema_reset --loss-vel 0.5 --recons-loss l1_smooth --exp-name RVQVAE --body_part lower_trans
+```
+
+## 2. Train Diffusion Model
+
+```
+python train.py -c configs/diffusion_rvqvae_128.yaml
+```
+
+
 # Acknowledgments
-Thanks to [EMAGE](https://github.com/PantoMatrix/PantoMatrix/tree/main/scripts/EMAGE_2024), [DiffuseStyleGesture](https://github.com/YoungSeng/DiffuseStyleGesture), [MDM](https://github.com/GuyTevet/motion-diffusion-model), [T2M-GPT](https://github.com/Mael-zys/T2M-GPT), [MoMask](https://github.com/EricGuo5513/momask-codes), [MotionCLIP](https://github.com/GuyTevet/MotionCLIP), [TMR](https://github.com/Mathux/TMR), [HumanML3D](https://github.com/EricGuo5513/HumanML3D), [OpenTMA](https://github.com/LinghaoChan/OpenTMA) , our code is partially borrowing from them. Please check these useful repos.
+Thanks to [EMAGE](https://github.com/PantoMatrix/PantoMatrix/tree/main/scripts/EMAGE_2024), [DiffuseStyleGesture](https://github.com/YoungSeng/DiffuseStyleGesture), [MDM](https://github.com/GuyTevet/motion-diffusion-model), [T2M-GPT](https://github.com/Mael-zys/T2M-GPT), [MoMask](https://github.com/EricGuo5513/momask-codes), [MotionCLIP](https://github.com/GuyTevet/MotionCLIP), [TMR](https://github.com/Mathux/TMR), [OpenTMA](https://github.com/LinghaoChan/OpenTMA), [HumanML3D](https://github.com/EricGuo5513/HumanML3D), [human_body_prior](https://github.com/nghorbani/human_body_prior), our code is partially borrowing from them. Please check these useful repos.
 
 
 # 📖 Citation
