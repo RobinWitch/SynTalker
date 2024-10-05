@@ -1,11 +1,20 @@
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/enabling-synergistic-full-body-control-in-1/gesture-generation-on-beat2)](https://paperswithcode.com/sota/gesture-generation-on-beat2?p=enabling-synergistic-full-body-control-in-1)
 
+# SynTalker: Enabling Synergistic Full-Body Control in Prompt-Based Co-Speech Motion Generation
+>
+<center>
+  <a href="https://robinwitch.github.io/SynTalker-Page">Project Page</a> •
+  <a href="https://arxiv.org/abs/2410.00464">Arxiv Paper</a> •
+  <a href="(https://www.youtube.com/watch?v=hkCQLrLarxs&t=7s)">Demo Video</a> •
+  <a href="#-citation">Citation</a>
+</center>
+
 # 📝 Release Plans
 
 - [x] A simple and powerful cospeech model (corespond to paper Table2:SynTalker (w/o both) )
 - [x] Training scripts (include training rvqvae and diffusion)
-- [ ] A web demo
+- [x] A web demo (We strongly suggest you to try it!)
 - [ ] Our syntalker can recieve both speech and text input simultaneously
 - [ ] Training scripts (include data preprocessing, training rvqvae, text-motion alignspace and diffusion)
 
@@ -33,17 +42,32 @@ bash bash_cospeech_download.sh
 bash bash_raw_cospeech_download.sh
 ```
 ## Eval
-
+- Evaluate metric
 ```
 python test.py -c configs/diffusion_rvqvae_128.yaml
 ```
 
+# 🚩 Running
+## Run a web demo
+```
+python demo.py -c ./configs/diffusion_rvqvae_128_hf.yaml
+```
+
+**Notice**: 
+If you use ssh to conect and run code in a headless computer, you may encounter an error `pyglet.canvas.xlib.NoSuchDisplayException: Cannot connect to "None"`. 
+Here, we recommend a method to solve it.
+
+```
+sudo apt-get install libegl1-mesa-dev libgles2-mesa-dev
+export PYOPENGL_PLATFORM='egl'
+python demo.py -c ./configs/diffusion_rvqvae_128_hf.yaml
+```
 
 # 🔥 Training from scratch
 
 ## 1. Train RVQVAE
 
-> Well, if your multiple gpus, we can parellel run these three command.
+> Well, if your multiple gpus, we can parellel run these three commands.
 
 ```
 python rvq_beatx_train.py --batch-size 256 --lr 2e-4 --total-iter 300000 --lr-scheduler 200000 --nb-code 512 --code-dim 512 --down-t 2 --depth 3 --dilation-growth-rate 3 --out-dir outputs/rvqvae --vq-act relu --quantizer ema_reset --loss-vel 0.5 --recons-loss l1_smooth --exp-name RVQVAE --body_part upper

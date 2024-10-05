@@ -33,7 +33,7 @@ from optimizers.loss_factory import get_loss_func
 class BaseTrainer(object):
     def __init__(self, args):
         self.args = args
-        self.rank = dist.get_rank()
+        self.rank = 0
         self.checkpoint_path = args.out_path + "custom/" + args.name + args.notes + "/" #wandb.run.dir #args.cache_path+args.out_path+"/"+args.name
         if self.rank==0:
             if self.args.stat == "ts":

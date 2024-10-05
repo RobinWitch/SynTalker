@@ -2,7 +2,7 @@ import configargparse
 import time
 import json
 import yaml
-
+import os
 
 def str2bool(v):
     """ from https://stackoverflow.com/a/43357954/1361529 """
@@ -283,6 +283,16 @@ def parse_args(config_path=None):
     parser.add("--vqvae_reverse_decoder_dilation", default=True, type=str2bool)
     parser.add("--vqvae_ckpt",type=str)
     parser.add("--root_weight",default=1.0,type=float)
+    
+    # --------------- render -------------------------- #
+    parser.add("--render_video_fps", default=30, type=int)
+    parser.add("--render_video_width", default=1920, type=int)
+    parser.add("--render_video_height", default=720, type=int)
+    cpu_cores = os.cpu_count() if os.cpu_count() is not None else 1
+    default_concurrent = max(1, cpu_cores // 2)
+    parser.add("--render_concurrent_num", default=default_concurrent, type=int)
+    parser.add("--render_tmp_img_filetype", default="bmp", type=str)
+    
     # logging
     parser.add("--log_period", default=10, type=int)
   

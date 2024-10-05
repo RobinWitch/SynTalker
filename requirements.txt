@@ -24,3 +24,8 @@ termcolor
 transformers
 gdown
 montreal-forced-aligner
+
+pyrender
+trimesh
+imageio
+moviepy

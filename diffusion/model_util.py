@@ -5,7 +5,7 @@ from diffusion.respace import SpacedDiffusion, space_timesteps
 
 
 
-def create_gaussian_diffusion(DiffusionClass=SpacedDiffusion):
+def create_gaussian_diffusion(DiffusionClass=SpacedDiffusion,use_ddim=False):
     noise_schedule = 'cosine'
     sigma_small = True
     lambda_vel = 0.0
@@ -17,7 +17,8 @@ def create_gaussian_diffusion(DiffusionClass=SpacedDiffusion):
     steps = 1000
     scale_beta = 1.  # no scaling
     timestep_respacing =None
-    #timestep_respacing = 'ddim100'  # can be used for ddim sampling, we don't use it.
+    if use_ddim:
+        timestep_respacing = 'ddim50'  # can be used for ddim sampling, we don't use it.
     learn_sigma = False
     rescale_timesteps = False
 
