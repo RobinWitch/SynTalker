@@ -1,6 +1,4 @@
-git clone https://github.com/RobinWitch/Montreal-Forced-Aligner.git
-cd Montreal-Forced-Aligner
-pip install -e .
+pip install git+https://github.com/RobinWitch/Montreal-Forced-Aligner.git
 conda install -c conda-forge kalpy
 pip install pgvector
 pip install Bio

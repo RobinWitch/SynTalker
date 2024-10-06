@@ -6,7 +6,7 @@
 <center>
   <a href="https://robinwitch.github.io/SynTalker-Page">Project Page</a> •
   <a href="https://arxiv.org/abs/2410.00464">Arxiv Paper</a> •
-  <a href="(https://www.youtube.com/watch?v=hkCQLrLarxs&t=7s)">Demo Video</a> •
+  <a href="https://youtu.be/hkCQLrLarxs">Demo Video</a> •
   <a href="#-citation">Citation</a>
 </center>
 
@@ -26,25 +26,30 @@
 conda create -n syntalker python=3.12
 conda activate syntalker
 pip install -r requirements.txt
+bash demo/install_mfa.sh
 ```
 
 
-## Download Data
+## Download Model
+```
+gdown https://drive.google.com/drive/folders/1tGTB40jF7v0RBXYU-VGRDsDOZp__Gd0_?usp=drive_link -O ./ckpt --folder
+
+gdown https://drive.google.com/drive/folders/1MCks7CMNBtAzU2XihYezNmiGT_6pWex8?usp=drive_link -O ./datasets/hub --folder
+```
+
+## Download Dataset
+> For evaluation and training, not necessary for running a web demo or inference.
 
 We provide two ways for getting data, if you want to quickly run this project, you can choose `Download the parsed data directly`, or if you want to build datasets from raw data, you can choose `Download the original raw data`.
 - Download the parsed data directly
 ```
-bash bash_cospeech_download.sh
+gdown https://drive.google.com/drive/folders/15gjxrnDQAx2qn7abctYsEx_-WsWH95tz?usp=drive_link -O ./datasets/beat_cache/beat_smplx_en_emage_2_128 --folder
+
 ```
 
 - Download the original raw data
 ```
 bash bash_raw_cospeech_download.sh
-```
-## Eval
-- Evaluate metric
-```
-python test.py -c configs/diffusion_rvqvae_128.yaml
 ```
 
 # 🚩 Running
@@ -62,6 +67,14 @@ sudo apt-get install libegl1-mesa-dev libgles2-mesa-dev
 export PYOPENGL_PLATFORM='egl'
 python demo.py -c ./configs/diffusion_rvqvae_128_hf.yaml
 ```
+
+
+## Eval
+> Require download dataset 
+```
+python test.py -c configs/diffusion_rvqvae_128.yaml
+```
+
 
 # 🔥 Training from scratch
 
@@ -89,7 +102,7 @@ python train.py -c configs/diffusion_rvqvae_128.yaml
 ```
 
 
-# Acknowledgments
+# 🙏 Acknowledgments
 Thanks to [EMAGE](https://github.com/PantoMatrix/PantoMatrix/tree/main/scripts/EMAGE_2024), [DiffuseStyleGesture](https://github.com/YoungSeng/DiffuseStyleGesture), [MDM](https://github.com/GuyTevet/motion-diffusion-model), [T2M-GPT](https://github.com/Mael-zys/T2M-GPT), [MoMask](https://github.com/EricGuo5513/momask-codes), [MotionCLIP](https://github.com/GuyTevet/MotionCLIP), [TMR](https://github.com/Mathux/TMR), [OpenTMA](https://github.com/LinghaoChan/OpenTMA), [HumanML3D](https://github.com/EricGuo5513/HumanML3D), [human_body_prior](https://github.com/nghorbani/human_body_prior), our code is partially borrowing from them. Please check these useful repos.
 
 
