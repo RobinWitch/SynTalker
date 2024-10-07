@@ -44,7 +44,7 @@ pipe = pipeline(
   model="openai/whisper-tiny.en",
   chunk_length_s=30,
   device=device,
-)
+)       
 
 debug = False
 
@@ -52,7 +52,10 @@ class BaseTrainer(object):
     def __init__(self, args,ap):
         args.use_ddim=True
         hf_dir = "hf"
-        tmp_dir = args.out_path + "custom/" + hf_dir
+        time_local = time.localtime()
+        time_name_expend = "%02d%02d_%02d%02d%02d_"%(time_local[1], time_local[2],time_local[3], time_local[4], time_local[5])
+        self.time_name_expend = time_name_expend
+        tmp_dir = args.out_path + "custom/"+ time_name_expend + hf_dir
         if not os.path.exists(tmp_dir + "/"):
             os.makedirs(tmp_dir + "/")
         self.audio_path = tmp_dir + "/tmp.wav"
@@ -85,7 +88,8 @@ class BaseTrainer(object):
     
         self.rank = 0 # dist.get_rank()
        
-        self.checkpoint_path = args.out_path + "custom/" + hf_dir + "/" 
+        self.checkpoint_path = tmp_dir
+        args.tmp_dir = tmp_dir
         if self.rank == 0:
             self.test_data = __import__(f"dataloaders.{args.dataset}", fromlist=["something"]).CustomDataset(args, "test")
             self.test_loader = torch.utils.data.DataLoader(
@@ -660,17 +664,10 @@ class BaseTrainer(object):
                 rec_exp_np = rec_exps.detach().cpu().numpy().reshape(bs*n, 100) 
                 tar_exp_np = tar_exps.detach().cpu().numpy().reshape(bs*n, 100)
                 tar_trans_np = tar_trans.detach().cpu().numpy().reshape(bs*n, 3)
-                gt_npz = np.load(self.args.data_path+self.args.pose_rep +"/"+test_seq_list.iloc[its]['id']+".npz", allow_pickle=True)
-                np.savez(results_save_path+"gt_"+test_seq_list.iloc[its]['id']+'.npz',
-                    betas=gt_npz["betas"],
-                    poses=tar_pose_np,
-                    expressions=tar_exp_np,
-                    trans=tar_trans_np,
-                    model='smplx2020',
-                    gender='neutral',
-                    mocap_frame_rate = 30 ,
-                )
-                np.savez(results_save_path+"res_"+test_seq_list.iloc[its]['id']+'.npz',
+                gt_npz = np.load("./demo/examples/2_scott_0_1_1.npz", allow_pickle=True)
+
+                results_npz_file_save_path = results_save_path+f"result_{self.time_name_expend}"+'.npz'
+                np.savez(results_npz_file_save_path,
                     betas=gt_npz["betas"],
                     poses=rec_pose_np,
                     expressions=rec_exp_np,
@@ -681,7 +678,7 @@ class BaseTrainer(object):
                 )
                 total_length += n
                 render_vid_path = other_tools_hf.render_one_sequence_no_gt(
-                    results_save_path+"res_"+test_seq_list.iloc[its]['id']+'.npz', 
+                    results_npz_file_save_path, 
                     # results_save_path+"gt_"+test_seq_list.iloc[its]['id']+'.npz', 
                     results_save_path,
                     self.audio_path,
@@ -690,7 +687,11 @@ class BaseTrainer(object):
                     args = self.args,
                     )
 
-        result = gr.Video(value=render_vid_path, visible=True)
+        result = [
+            gr.Video(value=render_vid_path, visible=True),
+            gr.File(value=results_npz_file_save_path, label="download motion and visualize in blender"),
+            ]
+        
         end_time = time.time() - start_time
         logger.info(f"total inference time: {int(end_time)} s for {int(total_length/self.args.pose_fps)} s motion")
         return result
@@ -716,11 +717,9 @@ def syntalker(audio_path,sample_stratege):
     # return one intance of trainer
     trainer = BaseTrainer(args, ap = audio_path)
     other_tools.load_checkpoints(trainer.model, args.test_ckpt, args.g_name)
+    
     result = trainer.test_demo(999)
     return result
-
-    
-
 
 examples = [
     ["demo/examples/2_scott_0_1_1.wav"],
@@ -738,12 +737,15 @@ demo = gr.Interface(
         gr.Radio(choices=["DDIM", "DDPM"], label="Please select a sample strategy", type="index", value="DDIM"),  # 0 for DDIM, 1 for DDPM
         # gr.File(label="Please upload textgrid format file here.", file_types=["TextGrid", "Textgrid", "textgrid"])
     ],  # input type
-    outputs=gr.Video(format="mp4", visible=True),
+    outputs=[
+        gr.Video(format="mp4", visible=True),
+        gr.File(label="download motion and visualize in blender")
+    ],
     title='SynTalker: Enabling Synergistic Full-Body Control in Prompt-Based Co-Speech Motion Generation',
     description="1. Upload your audio.  <br/>\
         2. Then, sit back and wait for the rendering to happen! This may take a while (e.g. 1 minutes) <br/>\
         3. After, you can view the videos.  <br/>\
-        4. Notice that we use a fix facial animation, our method only produce body motion. <br/>\
+        4. Notice that we use a fix face animation, our method only produce body motion. <br/>\
         5. Use DDPM sample strategy will generate a better result, while it will take more inference time.  \
             ",
     article="Project links: [SynTalker](https://robinwitch.github.io/SynTalker-Page). <br/>\

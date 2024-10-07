@@ -90,7 +90,7 @@ class CustomDataset(Dataset):
             with open(f"{args.data_path}weights/vocab.pkl", 'rb') as f:
                 self.lang_model = pickle.load(f)
                 
-        preloaded_dir = self.args.root_path + self.args.cache_path + loader_type + f"/{args.pose_rep}_cache"      
+        preloaded_dir = self.args.tmp_dir+'/' + loader_type + f"/{args.pose_rep}_cache"      
 
         if self.args.beat_align:
             if not os.path.exists(args.data_path+f"weights/mean_vel_{args.pose_rep}.npy"):

@@ -635,14 +635,14 @@ class CustomDataset(Dataset):
         #print(pose_each_file.shape)
         round_seconds_skeleton = pose_each_file.shape[0] // self.args.pose_fps  # assume 1500 frames / 15 fps = 100 s
         #print(round_seconds_skeleton)
-        if audio_each_file != []:
+        if audio_each_file is not None:
             if self.args.audio_rep != "wave16k":
                 round_seconds_audio = len(audio_each_file) // self.args.audio_fps # assume 16,000,00 / 16,000 = 100 s
             elif self.args.audio_rep == "mfcc":
                 round_seconds_audio = audio_each_file.shape[0] // self.args.audio_fps
             else:
                 round_seconds_audio = audio_each_file.shape[0] // self.args.audio_sr
-            if facial_each_file != []:
+            if facial_each_file is not None:
                 round_seconds_facial = facial_each_file.shape[0] // self.args.pose_fps
                 logger.info(f"audio: {round_seconds_audio}s, pose: {round_seconds_skeleton}s, facial: {round_seconds_facial}s")
                 round_seconds_skeleton = min(round_seconds_audio, round_seconds_skeleton, round_seconds_facial)
@@ -674,7 +674,7 @@ class CustomDataset(Dataset):
             logger.info(f"pose from frame {clip_s_f_pose} to {clip_e_f_pose}, length {cut_length}")
             logger.info(f"{num_subdivision} clips is expected with stride {self.args.stride}")
             
-            if audio_each_file != []:
+            if audio_each_file is not None:
                 audio_short_length = math.floor(cut_length / self.args.pose_fps * self.args.audio_fps)
                 """
                 for audio sr = 16000, fps = 15, pose_length = 34, 
@@ -719,7 +719,7 @@ class CustomDataset(Dataset):
                 if sample_pose.any() != None:
                     # filtering motion skeleton data
                     sample_pose, filtering_message = MotionPreprocessor(sample_pose).get()
-                    is_correct_motion = (sample_pose != [])
+                    is_correct_motion = (sample_pose is not None)
                     if is_correct_motion or disable_filtering:
                         sample_pose_list.append(sample_pose)
                         sample_audio_list.append(sample_audio)
@@ -793,7 +793,7 @@ class MotionPreprocessor:
         assert (self.skeletons is not None)
 
         # filtering
-        if self.skeletons != []:
+        if self.skeletons is not None:
             if self.check_pose_diff():
                 self.skeletons = []
                 self.filtering_message = "pose"
@@ -804,7 +804,7 @@ class MotionPreprocessor:
             #     self.skeletons = []
             #     self.filtering_message = "motion"
 
-        # if self.skeletons != []:
+        # if self.skeletons is not None:
         #     self.skeletons = self.skeletons.tolist()
         #     for i, frame in enumerate(self.skeletons):
         #         assert not np.isnan(self.skeletons[i]).any()  # missing joints

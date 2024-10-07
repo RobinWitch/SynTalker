@@ -2,6 +2,7 @@
 *__pycache__*
 ckpt
 datasets
+!datasets/BEAT_SMPL/beat_v2.0.0/beat_english_v2.0.0/weights/
 outputs
 demo/Montreal-Forced-Aligner
 demo/test*

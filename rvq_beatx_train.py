@@ -13,8 +13,8 @@ def get_gpt_id():
             gpu_indices.append(i)
     assert len(gpu_indices) > 0, "There is no GPU with performance state P8 and low memory usage"
     pynvml.nvmlShutdown()
-    print(f"usalbe gpu ids: {gpu_indices} , now we use {gpu_indices[0]}")
-    return str(gpu_indices[0])
+    print(f"usalbe gpu ids: {gpu_indices} , now we use {gpu_indices[-1]}")
+    return str(gpu_indices[-1])
 dev = get_gpt_id()
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = dev
@@ -240,6 +240,14 @@ elif args.body_part in "lower_trans":
     mask = lower_body_mask
     rec_mask = list(range(len(mask)))
 
+elif args.body_part in "whole_trans":
+    joints = list(range(0,22))+list(range(25,55))
+    whole_body_mask = []
+    for i in joints:
+        whole_body_mask.extend([i*6, i*6+1, i*6+2, i*6+3, i*6+4, i*6+5])
+    whole_body_mask.extend([330,331,332])
+    mask = whole_body_mask
+    rec_mask = list(range(len(mask)))
 
 
 
@@ -254,7 +262,8 @@ elif args.body_part in "lower_trans":
     dim_pose = 57
 elif args.body_part in "whole":
     dim_pose = 312
-
+elif args.body_part in "whole_trans":
+    dim_pose = 315
 
 args.num_quantizers = 6
 args.shared_codebook =  False
@@ -329,7 +338,7 @@ for nb_iter in range(1, args.total_iter + 1):
     gt_motion = next(train_loader_iter)
     gt_motion = gt_motion[...,mask].cuda().float() # bs, nb_joints, joints_dim, seq_len
     
-    pred_motion, loss_commit, perplexity = net(gt_motion)
+    pred_motion, loss_commit, perplexity = net(gt_motion).values()
     loss_motion = Loss.my_forward(pred_motion, gt_motion,rec_mask)
     loss_vel = 0
     

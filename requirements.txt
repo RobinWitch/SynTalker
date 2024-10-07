@@ -23,7 +23,6 @@ textgrid
 termcolor
 transformers
 gdown
-montreal-forced-aligner
 
 pyrender
 trimesh

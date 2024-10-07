@@ -18,6 +18,10 @@
 - [ ] Our syntalker can recieve both speech and text input simultaneously
 - [ ] Training scripts (include data preprocessing, training rvqvae, text-motion alignspace and diffusion)
 
+# 💖 Online Demo
+Feel free to exprience our online [web demo](https://ba94b4e70b26e4c550.gradio.live)!
+
+
 # ⚒️ Installation
 
 ## Build Environtment
@@ -64,8 +68,7 @@ Here, we recommend a method to solve it.
 
 ```
 sudo apt-get install libegl1-mesa-dev libgles2-mesa-dev
-export PYOPENGL_PLATFORM='egl'
-python demo.py -c ./configs/diffusion_rvqvae_128_hf.yaml
+PYOPENGL_PLATFORM='egl' python demo.py -c ./configs/diffusion_rvqvae_128_hf.yaml
 ```
 
 
