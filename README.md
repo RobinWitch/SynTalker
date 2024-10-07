@@ -7,6 +7,7 @@
   <a href="https://robinwitch.github.io/SynTalker-Page">Project Page</a> •
   <a href="https://arxiv.org/abs/2410.00464">Arxiv Paper</a> •
   <a href="https://youtu.be/hkCQLrLarxs">Demo Video</a> •
+  <a href="https://ba94b4e70b26e4c550.gradio.live">Web Gradio Demo</a> •
   <a href="#-citation">Citation</a>
 </center>
 
@@ -37,7 +38,6 @@ bash demo/install_mfa.sh
 ## Download Model
 ```
 gdown https://drive.google.com/drive/folders/1tGTB40jF7v0RBXYU-VGRDsDOZp__Gd0_?usp=drive_link -O ./ckpt --folder
-
 gdown https://drive.google.com/drive/folders/1MCks7CMNBtAzU2XihYezNmiGT_6pWex8?usp=drive_link -O ./datasets/hub --folder
 ```
 
@@ -48,7 +48,6 @@ We provide two ways for getting data, if you want to quickly run this project, y
 - Download the parsed data directly
 ```
 gdown https://drive.google.com/drive/folders/15gjxrnDQAx2qn7abctYsEx_-WsWH95tz?usp=drive_link -O ./datasets/beat_cache/beat_smplx_en_emage_2_128 --folder
-
 ```
 
 - Download the original raw data
