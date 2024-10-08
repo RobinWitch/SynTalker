@@ -35,7 +35,6 @@ from transformers import pipeline
 from diffusion.model_util import create_gaussian_diffusion
 from diffusion.resample import create_named_schedule_sampler
 from models.vq.model import RVQVAE
-import train
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
@@ -743,7 +742,7 @@ demo = gr.Interface(
     ],
     title='SynTalker: Enabling Synergistic Full-Body Control in Prompt-Based Co-Speech Motion Generation',
     description="1. Upload your audio.  <br/>\
-        2. Then, sit back and wait for the rendering to happen! This may take a while (e.g. 1 minutes) <br/>\
+        2. Then, sit back and wait for the rendering to happen! This may take a while (e.g. 1-4 minutes) <br/>\
         3. After, you can view the videos.  <br/>\
         4. Notice that we use a fix face animation, our method only produce body motion. <br/>\
         5. Use DDPM sample strategy will generate a better result, while it will take more inference time.  \
@@ -758,4 +757,4 @@ if __name__ == "__main__":
     os.environ["MASTER_ADDR"]='127.0.0.1'
     os.environ["MASTER_PORT"]='8675'
     #os.environ["TORCH_DISTRIBUTED_DEBUG"] = "DETAIL"
-    demo.launch(share=True)
+    demo.launch(server_name="0.0.0.0",share=True)
