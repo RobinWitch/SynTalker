@@ -77,6 +77,9 @@ PYOPENGL_PLATFORM='egl' python demo.py -c ./configs/diffusion_rvqvae_128_hf.yaml
 python test.py -c configs/diffusion_rvqvae_128.yaml
 ```
 
+# 📺 Visualize
+Following [EMAGE](https://github.com/PantoMatrix/PantoMatrix), you can download [SMPLX blender addon](https://drive.google.com/file/d/1O04GfzUw73PkPBhiZNL98vXpgFjewFUy/view?usp=drive_link), and install it in your blender 3.x or 4.x. Click the button `Add Animation` to visualize the generated smplx file (like xxx.npz).
+
 
 # 🔥 Training from scratch
 
