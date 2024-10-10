@@ -7,7 +7,7 @@
   <a href="https://robinwitch.github.io/SynTalker-Page">Project Page</a> •
   <a href="https://arxiv.org/abs/2410.00464">Arxiv Paper</a> •
   <a href="https://youtu.be/hkCQLrLarxs">Demo Video</a> •
-  <a href="https://f285fae0663c08b20c.gradio.live">Web Gradio Demo</a> •
+  <a href="https://7b0d6ce2d7377dda45.gradio.live">Web Gradio Demo</a> •
   <a href="#-citation">Citation</a>
 </center>
 
@@ -20,7 +20,7 @@
 - [ ] Training scripts (include data preprocessing, training rvqvae, text-motion alignspace and diffusion)
 
 # 💖 Online Demo
-Feel free to exprience our online [web demo](https://f285fae0663c08b20c.gradio.live)!
+Feel free to exprience our online [web demo](https://7b0d6ce2d7377dda45.gradio.live)!
 
 
 # ⚒️ Installation
