@@ -1,13 +1,14 @@
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/enabling-synergistic-full-body-control-in-1/gesture-generation-on-beat2)](https://paperswithcode.com/sota/gesture-generation-on-beat2?p=enabling-synergistic-full-body-control-in-1)
-
+  <a href='https://huggingface.co/spaces/robinwitch/SynTalker'>
+  <img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-yellow'></a>
 # SynTalker: Enabling Synergistic Full-Body Control in Prompt-Based Co-Speech Motion Generation
 >
 <center>
   <a href="https://robinwitch.github.io/SynTalker-Page">Project Page</a> •
   <a href="https://arxiv.org/abs/2410.00464">Arxiv Paper</a> •
   <a href="https://youtu.be/hkCQLrLarxs">Demo Video</a> •
-  <a href="https://7b0d6ce2d7377dda45.gradio.live">Web Gradio Demo</a> •
+  <a href="https://huggingface.co/spaces/robinwitch/SynTalker">Web Gradio Demo</a> •
   <a href="#-citation">Citation</a>
 </center>
 
@@ -20,7 +21,7 @@
 - [ ] Training scripts (include data preprocessing, training rvqvae, text-motion alignspace and diffusion)
 
 # 💖 Online Demo
-Feel free to exprience our online [web demo](https://7b0d6ce2d7377dda45.gradio.live)!
+Thank Hugging Face🤗 for providing us GPU! Feel free to exprience our online [web demo](https://huggingface.co/spaces/robinwitch/SynTalker)!
 
 
 # ⚒️ Installation
