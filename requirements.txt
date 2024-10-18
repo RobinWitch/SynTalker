@@ -23,7 +23,7 @@ textgrid
 termcolor
 transformers
 gdown
-
+fasttext
 pyrender
 trimesh
 imageio

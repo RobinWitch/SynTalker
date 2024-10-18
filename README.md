@@ -2,13 +2,16 @@
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/enabling-synergistic-full-body-control-in-1/gesture-generation-on-beat2)](https://paperswithcode.com/sota/gesture-generation-on-beat2?p=enabling-synergistic-full-body-control-in-1)
   <a href='https://huggingface.co/spaces/robinwitch/SynTalker'>
   <img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-yellow'></a>
+<a href="https://colab.research.google.com/drive/1fEXgO-6wGYxfnFuqT12wUdk8-XpHx6yQ?usp=sharing" 
+target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Syntalker Colab"/></a> 
 # SynTalker: Enabling Synergistic Full-Body Control in Prompt-Based Co-Speech Motion Generation
->
+
 <center>
   <a href="https://robinwitch.github.io/SynTalker-Page">Project Page</a> •
   <a href="https://arxiv.org/abs/2410.00464">Arxiv Paper</a> •
   <a href="https://youtu.be/hkCQLrLarxs">Demo Video</a> •
   <a href="https://huggingface.co/spaces/robinwitch/SynTalker">Web Gradio Demo</a> •
+  <a href="https://colab.research.google.com/drive/1fEXgO-6wGYxfnFuqT12wUdk8-XpHx6yQ?usp=sharing">Colab</a> •
   <a href="#-citation">Citation</a>
 </center>
 
@@ -45,12 +48,6 @@ gdown https://drive.google.com/drive/folders/1MCks7CMNBtAzU2XihYezNmiGT_6pWex8?u
 ## Download Dataset
 > For evaluation and training, not necessary for running a web demo or inference.
 
-We provide two ways for getting data, if you want to quickly run this project, you can choose `Download the parsed data directly`, or if you want to build datasets from raw data, you can choose `Download the original raw data`.
-- Download the parsed data directly
-```
-gdown https://drive.google.com/drive/folders/15gjxrnDQAx2qn7abctYsEx_-WsWH95tz?usp=drive_link -O ./datasets/beat_cache/beat_smplx_en_emage_2_128 --folder
-```
-
 - Download the original raw data
 ```
 bash bash_raw_cospeech_download.sh
@@ -77,6 +74,8 @@ PYOPENGL_PLATFORM='egl' python demo.py -c ./configs/diffusion_rvqvae_128_hf.yaml
 ```
 python test.py -c configs/diffusion_rvqvae_128.yaml
 ```
+
+We also provide a [colab notebook](https://colab.research.google.com/drive/1fEXgO-6wGYxfnFuqT12wUdk8-XpHx6yQ?usp=drive_link) for you to evaluate it.
 
 # 📺 Visualize
 Following [EMAGE](https://github.com/PantoMatrix/PantoMatrix), you can download [SMPLX blender addon](https://drive.google.com/file/d/1O04GfzUw73PkPBhiZNL98vXpgFjewFUy/view?usp=drive_link), and install it in your blender 3.x or 4.x. Click the button `Add Animation` to visualize the generated smplx file (like xxx.npz).
