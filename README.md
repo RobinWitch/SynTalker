@@ -20,7 +20,7 @@ target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.
 - [x] A simple and powerful cospeech model (corespond to paper Table2:SynTalker (w/o both) )
 - [x] Training scripts (include training rvqvae and diffusion)
 - [x] A web demo (We strongly suggest you to try it!)
-- [ ] Our syntalker can recieve both speech and text input simultaneously
+- [x] Our syntalker can recieve both speech and text input simultaneously
 - [ ] Training scripts (include data preprocessing, training rvqvae, text-motion alignspace and diffusion)
 
 # 💖 Online Demo
@@ -50,7 +50,7 @@ gdown https://drive.google.com/drive/folders/1MCks7CMNBtAzU2XihYezNmiGT_6pWex8?u
 
 - Download the original raw data
 ```
-bash bash_raw_cospeech_download.sh
+bash preprocess/bash_raw_cospeech_download.sh
 ```
 
 # 🚩 Running
@@ -106,6 +106,40 @@ python rvq_beatx_train.py --batch-size 256 --lr 2e-4 --total-iter 300000 --lr-sc
 python train.py -c configs/diffusion_rvqvae_128.yaml
 ```
 
+
+# 💭 Enabling Text Control
+
+## Download models and datasets
+```
+python preprocess/download_hf.py
+```
+
+## Generate
+> It will generate motions using the prompt you input and the speech audio from test datasets
+```
+python test_h3d.py -c configs/diffusion_h3d.yaml --upper_prompt "your prompt" --lower_prompt "your prompt"
+```
+
+For example:
+```
+python test_h3d.py -c configs/diffusion_h3d.yaml --upper_prompt "A person raises up right hand" --lower_prompt "A man is kneel down"
+```
+The path of the generated motion npy file, the rendered video file, and the audio used,  will be automatically printed in the console.
+
+## Training (TO DO)
+
+### 1. Datapreprocess
+We need to download AMASS datasets(both smlph and smplx format) from https://amass.is.tue.mpg.de/
+into `./datasets`.
+
+We also need to download BEATX datasets as same as previous.
+```
+bash preprocess/bash_raw_cospeech_download.sh
+```
+### 2. FPS Correction
+The FPS for all actions in AMASS SMPLX is currently set to 120, which is incorrect and needs to be adjusted. Meanwhile, the FPS for SMPLH is correct, so we need to align all SMPLX FPS values with the corresponding SMPLH FPS values.
+
+Following [SMPLX_FPS_Correction.ipynb](preprocess/SMPLX_FPS_Correction.ipynb) to correct it.
 
 # 🙏 Acknowledgments
 Thanks to [EMAGE](https://github.com/PantoMatrix/PantoMatrix/tree/main/scripts/EMAGE_2024), [DiffuseStyleGesture](https://github.com/YoungSeng/DiffuseStyleGesture), [MDM](https://github.com/GuyTevet/motion-diffusion-model), [T2M-GPT](https://github.com/Mael-zys/T2M-GPT), [MoMask](https://github.com/EricGuo5513/momask-codes), [MotionCLIP](https://github.com/GuyTevet/MotionCLIP), [TMR](https://github.com/Mathux/TMR), [OpenTMA](https://github.com/LinghaoChan/OpenTMA), [HumanML3D](https://github.com/EricGuo5513/HumanML3D), [human_body_prior](https://github.com/nghorbani/human_body_prior), our code is partially borrowing from them. Please check these useful repos.

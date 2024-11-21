@@ -28,3 +28,4 @@ pyrender
 trimesh
 imageio
 moviepy
+huggingface_hub

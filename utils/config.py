@@ -60,7 +60,12 @@ def parse_args(config_path=None):
     parser.add("--vqvae_latent_scale",default=1.0,type=float)
     parser.add("--vqvae_squeeze_scale", default="1", type=int)
     parser.add("--vqvae_type", default="vqvae", type=str)
-    
+    parser.add("--text_sample_stride", default=1, type=int)
+    parser.add("--only_data",default=0,type=int)    # 1为beatx，2为h3d
+    parser.add("--audio_scale",default=1.0,type=float)
+    parser.add("--prompt_scale",default=1.0,type=float)    
+    parser.add("--tmr_mean_pose_path", default="/datasets/trinity/train/", type=str)
+    parser.add("--tmr_std_pose_path", default="/datasets/trinity/train/", type=str)
     
     # ------------------- evaluation ----------------------- #
     parser.add("--test_ckpt", default="/datasets/beat_cache/beat_4english_15_141/last.bin")
@@ -283,6 +288,12 @@ def parse_args(config_path=None):
     parser.add("--vqvae_reverse_decoder_dilation", default=True, type=str2bool)
     parser.add("--vqvae_ckpt",type=str)
     parser.add("--root_weight",default=1.0,type=float)
+    
+    
+    # ------------------- prompt -------------------------- #
+    parser.add("--upper_prompt", default=None, type=str)
+    parser.add("--hands_prompt", default=None, type=str)
+    parser.add("--lower_prompt", default=None, type=str)
     
     # --------------- render -------------------------- #
     parser.add("--render_video_fps", default=30, type=int)

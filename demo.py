@@ -75,6 +75,7 @@ class BaseTrainer(object):
             
             command = ["mfa", "align", tmp_dir, "english_us_arpa", "english_us_arpa", tmp_dir]
             result = subprocess.run(command, capture_output=True, text=True)
+            print(result)
             
 
         ap = (ssr, audio)

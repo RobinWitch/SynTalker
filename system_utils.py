@@ -1,7 +1,7 @@
 import pynvml
 
 def get_gpt_id():
-    # return "1"
+    return "1"
     pynvml.nvmlInit()
     gpu_indices = []
     device_count = pynvml.nvmlDeviceGetCount()
