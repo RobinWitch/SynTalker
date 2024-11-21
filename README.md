@@ -137,7 +137,7 @@ We also need to download BEATX datasets as same as previous.
 bash preprocess/bash_raw_cospeech_download.sh
 ```
 ### 2. FPS Correction
-The FPS for all actions in AMASS SMPLX is currently set to 120, which is incorrect and needs to be adjusted. Meanwhile, the FPS for SMPLH is correct, so we need to align all SMPLX FPS values with the corresponding SMPLH FPS values.
+The FPS for all motions in AMASS SMPLX is currently set to 120, which is incorrect and needs to be adjusted. Meanwhile, the FPS for SMPLH is correct, so we need to align all SMPLX FPS values with the corresponding SMPLH FPS values.
 
 Following [SMPLX_FPS_Correction.ipynb](preprocess/SMPLX_FPS_Correction.ipynb) to correct it.
 
