@@ -1,0 +1,3 @@
+[submodule "libs/human_body_prior"]
+	path = libs/human_body_prior
+	url = https://github.com/RobinWitch/human_body_prior.git
