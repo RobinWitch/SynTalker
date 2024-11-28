@@ -897,6 +897,7 @@ class CustomTrainer(train.BaseTrainer):
                         audio_clip.write_audiofile(results_save_path+f"/rec_{its}_{self.prompt}.mp3")
                     
                     print("mp4 save to: ", rec_animation_save_path)
+                    print("npy save to: ", rec_npy_save_path)
 
         # data_tools.result2target_vis(self.args.pose_version, results_save_path, results_save_path, self.test_demo, False)
         end_time = time.time() - start_time

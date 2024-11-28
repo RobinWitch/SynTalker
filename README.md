@@ -126,6 +126,22 @@ python test_h3d.py -c configs/diffusion_h3d.yaml --upper_prompt "A person raises
 ```
 The path of the generated motion npy file, the rendered video file, and the audio used,  will be automatically printed in the console.
 
+If you want to further convert it into a npz file format that can be imported into Blender for visualization, you can proceed as follows:
+
+First you should install submodules,
+```
+git submodule update --init --recursive
+git submodule update --remote --recursive
+```
+Then run the command,
+```
+python libs/human_body_prior/tutorials/mdm_motion2smpl.py --input your_npy_file_path --output your_file_name.npz
+```
+For example:
+```
+python libs/human_body_prior/tutorials/mdm_motion2smpl.py --input ./outputs/audio2pose/test/custom/1128_151129_diffusion_h3d/999/rec_0_prompt.npy --output your_file_name.npz
+
+```
 ## Training (TO DO)
 
 ### 1. Datapreprocess
