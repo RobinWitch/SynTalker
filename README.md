@@ -140,7 +140,6 @@ python libs/human_body_prior/tutorials/mdm_motion2smpl.py --input your_npy_file_
 For example:
 ```
 python libs/human_body_prior/tutorials/mdm_motion2smpl.py --input ./outputs/audio2pose/test/custom/1128_151129_diffusion_h3d/999/rec_0_prompt.npy --output your_file_name.npz
-
 ```
 ## Training (TO DO)
 
