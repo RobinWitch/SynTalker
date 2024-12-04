@@ -156,6 +156,27 @@ The FPS for all motions in AMASS SMPLX is currently set to 120, which is incorre
 
 Following [SMPLX_FPS_Correction.ipynb](preprocess/SMPLX_FPS_Correction.ipynb) to correct it.
 
+### 3. Get HumanML3D Representation
+TODO
+
+### 4. Train RVQVAE
+TODO
+
+### 5. Train Text-Motion-Align-Space
+TODO
+
+### 6. Train Diffusion Model
+We also provide a data cache for training it. Data cache is only made up of data's HumanML3D representation, and not rely on RVQVAE and Text-Motion-Align-Space.
+
+Make sure you have [Download models and datasets](#download-models-and-datasets), and unziped them.(include `datasets/HumanML3D`, `datasets/beat_cache/beatx_1-30_amass_h3d.zip`)
+
+Then just run the command as below.
+```
+python train_h3d.py -c configs/diffusion_h3d.yaml --use_amass True
+```
+
+
+
 # 🙏 Acknowledgments
 Thanks to [EMAGE](https://github.com/PantoMatrix/PantoMatrix/tree/main/scripts/EMAGE_2024), [DiffuseStyleGesture](https://github.com/YoungSeng/DiffuseStyleGesture), [MDM](https://github.com/GuyTevet/motion-diffusion-model), [T2M-GPT](https://github.com/Mael-zys/T2M-GPT), [MoMask](https://github.com/EricGuo5513/momask-codes), [MotionCLIP](https://github.com/GuyTevet/MotionCLIP), [TMR](https://github.com/Mathux/TMR), [OpenTMA](https://github.com/LinghaoChan/OpenTMA), [HumanML3D](https://github.com/EricGuo5513/HumanML3D), [human_body_prior](https://github.com/nghorbani/human_body_prior), our code is partially borrowing from them. Please check these useful repos.
 
