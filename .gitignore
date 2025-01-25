@@ -7,3 +7,14 @@ outputs
 demo/Montreal-Forced-Aligner
 demo/test*
 demo/cache
+
+
+process_h3d_beatx/beat_data
+process_h3d_beatx/HumanML3D
+process_h3d_beatx/pose_data
+process_h3d_beatx/joints
+
+process_h3d_amass/amass_data
+process_h3d_amass/HumanML3D
+process_h3d_amass/pose_data
+process_h3d_amass/joints

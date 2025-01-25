@@ -145,7 +145,7 @@ python libs/human_body_prior/tutorials/mdm_motion2smpl.py --input ./outputs/audi
 
 ### 1. Datapreprocess
 We need to download AMASS datasets(both smlph and smplx format) from https://amass.is.tue.mpg.de/
-into `./datasets`.
+into `./datasets/AMASS_SMPLX`.
 
 We also need to download BEATX datasets as same as previous.
 ```
@@ -157,13 +157,32 @@ The FPS for all motions in AMASS SMPLX is currently set to 120, which is incorre
 Following [SMPLX_FPS_Correction.ipynb](preprocess/SMPLX_FPS_Correction.ipynb) to correct it.
 
 ### 3. Get HumanML3D Representation
-TODO
+
+Enter the `amass_h3d` folder and execute `raw_pose_processing.ipynb`,`motion_representation.ipynb` in sequence.
+
+Enter the `beatx_h3d` folder and execute `raw_pose_processing.ipynb`,`motion_representation.ipynb`,`cal_mean_variance.ipynb` in sequence.
 
 ### 4. Train RVQVAE
-TODO
+
+> Well, if your multiple gpus, we can parellel run these three commands.
+
+```
+python rvq_beatx_train.py --batch-size 256 --lr 2e-4 --total-iter 300000 --lr-scheduler 200000 --nb-code 512 --code-dim 512 --down-t 2 --depth 3 --dilation-growth-rate 3 --out-dir outputs/rvqvae --vq-act relu --quantizer ema_reset --loss-vel 0.5 --recons-loss l1_smooth --exp-name RVQVAE_h3d --dataname h3d_623 --body_part upper
+```
+
+
+```
+python rvq_beatx_train.py --batch-size 256 --lr 2e-4 --total-iter 300000 --lr-scheduler 200000 --nb-code 512 --code-dim 512 --down-t 2 --depth 3 --dilation-growth-rate 3 --out-dir outputs/rvqvae --vq-act relu --quantizer ema_reset --loss-vel 0.5 --recons-loss l1_smooth --exp-name RVQVAE_h3d --dataname h3d_623 --body_part hands
+```
+
+```
+python rvq_beatx_train.py --batch-size 256 --lr 2e-4 --total-iter 300000 --lr-scheduler 200000 --nb-code 512 --code-dim 512 --down-t 2 --depth 3 --dilation-growth-rate 3 --out-dir outputs/rvqvae --vq-act relu --quantizer ema_reset --loss-vel 0.5 --recons-loss l1_smooth --exp-name RVQVAE_h3d --dataname h3d_623 --body_part lower_trans
+```
 
 ### 5. Train Text-Motion-Align-Space
-TODO
+TODO in one month:
+
+You can refer to [OpenTMA](https://github.com/LinghaoChan/OpenTMA) or [TMR](https://github.com/Mathux/TMR).
 
 ### 6. Train Diffusion Model
 We also provide a data cache for training it. Data cache is only made up of data's HumanML3D representation, and not rely on RVQVAE and Text-Motion-Align-Space.

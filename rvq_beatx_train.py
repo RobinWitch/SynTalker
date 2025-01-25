@@ -173,7 +173,7 @@ elif args.dataname == 't2m':
     dataset_opt_path = 'checkpoints/t2m/Comp_v6_KLD005/opt.txt'
     args.nb_joints = 22
 
-elif args.dataname == 'h3d623':
+elif args.dataname == 'h3d_623':
     dataset_opt_path = 'checkpoints/t2m/Comp_v6_KLD005/opt.txt'
     args.nb_joints = 52
 
@@ -184,6 +184,9 @@ from utils.config import parse_args
 
 dataset_args = parse_args("configs/beat2_rvqvae.yaml")
 build_cache = not os.path.exists(dataset_args.cache_path)
+
+if args.dataname == 'h3d_623':
+    from dataloaders.mix_sep_h3d import CustomDataset
 
 trainSet = CustomDataset(dataset_args,"train",build_cache = build_cache)
 train_loader = torch.utils.data.DataLoader(trainSet,
@@ -211,6 +214,7 @@ if args.body_part in "upper":
         upper_body_mask.extend([i*6, i*6+1, i*6+2, i*6+3, i*6+4, i*6+5])
     mask = upper_body_mask
     rec_mask = list(range(len(mask)))
+    dim_pose = 78
 
     
 elif args.body_part in "hands":
@@ -221,6 +225,7 @@ elif args.body_part in "hands":
         hands_body_mask.extend([i*6, i*6+1, i*6+2, i*6+3, i*6+4, i*6+5])
     mask = hands_body_mask
     rec_mask = list(range(len(mask)))
+    dim_pose = 180
 
 
 elif args.body_part in "lower":
@@ -230,6 +235,7 @@ elif args.body_part in "lower":
         lower_body_mask.extend([i*6, i*6+1, i*6+2, i*6+3, i*6+4, i*6+5])
     mask = lower_body_mask
     rec_mask = list(range(len(mask)))
+    dim_pose = 54
 
 elif args.body_part in "lower_trans":
     joints = [0,1,2,4,5,7,8,10,11]
@@ -239,6 +245,7 @@ elif args.body_part in "lower_trans":
     lower_body_mask.extend([330,331,332])
     mask = lower_body_mask
     rec_mask = list(range(len(mask)))
+    dim_pose = 57
 
 elif args.body_part in "whole_trans":
     joints = list(range(0,22))+list(range(25,55))
@@ -248,22 +255,46 @@ elif args.body_part in "whole_trans":
     whole_body_mask.extend([330,331,332])
     mask = whole_body_mask
     rec_mask = list(range(len(mask)))
-
-
-
-##### ---- Network ---- #####
-if args.body_part in "upper":
-    dim_pose = 78   
-elif args.body_part in "hands":
-    dim_pose = 180
-elif args.body_part in "lower":
-    dim_pose = 54
-elif args.body_part in "lower_trans":
-    dim_pose = 57
-elif args.body_part in "whole":
-    dim_pose = 312
-elif args.body_part in "whole_trans":
     dim_pose = 315
+
+
+if args.dataname == 'h3d_623':
+    if args.body_part in "upper":
+
+        joints = [3,6,9,12,13,14,15,16,17,18,19,20,21]
+        upper_body_mask = []
+        for i in joints:
+            upper_body_mask.extend([4+ (i-1)*3, 4+ (i-1)*3+1, 4+ (i-1)*3+2])
+            upper_body_mask.extend([4+ 51*3 +(i-1)*6, 4+ 51*3 + (i-1)*6+1, 4+ 51*3 + (i-1)*6+2, 4+ 51*3 + (i-1)*6+3, 4+ 51*3 + (i-1)*6+4, 4+ 51*3 + (i-1)*6+5])
+            upper_body_mask.extend([4+ 51*9 +i*3, 4+ 51*9 + i*3+1, 4+ 51*9 + i*3+2])
+        mask = upper_body_masks
+        rec_mask = list(range(len(mask)))
+        dim_pose = 156
+        
+    elif args.body_part in "hands":
+        joints = list(range(22,52))
+        hands_body_mask = []
+        for i in joints:
+            hands_body_mask.extend([4+ (i-1)*3, 4+ (i-1)*3+1, 4+ (i-1)*3+2])
+            hands_body_mask.extend([4+ 51*3 +(i-1)*6, 4+ 51*3 + (i-1)*6+1, 4+ 51*3 + (i-1)*6+2, 4+ 51*3 + (i-1)*6+3, 4+ 51*3 + (i-1)*6+4, 4+ 51*3 + (i-1)*6+5])
+            hands_body_mask.extend([4+ 51*9 +i*3, 4+ 51*9 + i*3+1, 4+ 51*9 + i*3+2])
+        mask = hands_body_mask
+        rec_mask = list(range(len(mask)))
+        dim_pose = 360
+
+    elif args.body_part in "lower_trans":
+        joints = [0,1,2,4,5,7,8,10,11]
+        lower_body_mask = list(range(0, 4))+list(range(619,623))
+        for i in joints:
+            if i>0:
+                lower_body_mask.extend([4+ (i-1)*3, 4+ (i-1)*3+1, 4+ (i-1)*3+2])
+                lower_body_mask.extend([4+ 51*3 +(i-1)*6, 4+ 51*3 + (i-1)*6+1, 4+ 51*3 + (i-1)*6+2, 4+ 51*3 + (i-1)*6+3, 4+ 51*3 + (i-1)*6+4, 4+ 51*3 + (i-1)*6+5])
+            lower_body_mask.extend([4+ 51*9 +i*3, 4+ 51*9 + i*3+1, 4+ 51*9 + i*3+2])
+        mask = lower_body_mask
+        rec_mask = list(range(len(mask)))
+        dim_pose = 107
+
+
 
 args.num_quantizers = 6
 args.shared_codebook =  False

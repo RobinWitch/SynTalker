@@ -29,7 +29,7 @@ import pickle
 from models.motionclip import get_model
 import clip
 from diffusion.cfg_sampler import ClassifierFreeSampleModel_Bodypart, ClassifierFreeSampleModel, TwoClassifierFreeSampleModel,TwoClassifierFreeSampleModel_Bodypart
-sys.path.append('/mnt/data/cbh/fu06/PantoMatrix/scripts/EMAGE_2024/models')
+sys.path.append('./models')
 from models.temos.motionencoder.actor import ActorAgnosticEncoder
 from models.temos.textencoder.distillbert_actor import DistilbertActorAgnosticEncoder
 from utils.plot_script import plot_3d_motion,smpl_kinematic_chain,recover_from_ric

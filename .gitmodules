@@ -1,3 +1,6 @@
 [submodule "libs/human_body_prior"]
 	path = libs/human_body_prior
 	url = https://github.com/RobinWitch/human_body_prior.git
+[submodule "libs/HumanML3D"]
+	path = libs/HumanML3D
+	url = https://github.com/EricGuo5513/HumanML3D.git
