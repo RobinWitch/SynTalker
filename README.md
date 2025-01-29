@@ -198,7 +198,6 @@ cp libs/HumanML3D/HumanML3D/*txt process_h3d_amass/HumanML3D
 unzip libs/HumanML3D/HumanML3D/texts.zip -d process_h3d_amass/HumanML3D
 
 ln -s $(pwd)/process_h3d_amass/HumanML3D/ libs/OpenTMA/datasets/humanml3d
-
 ```
 After that, download the checkpoints from the [Google Drive](https://drive.google.com/drive/folders/1aWpJH4KTXsWnxG5MciLHXPXGBS7vWXf7?usp=share_link), put them in the `libs/OpenTMA/deps` folder, and unzip them.
 
