@@ -4,3 +4,6 @@
 [submodule "libs/HumanML3D"]
 	path = libs/HumanML3D
 	url = https://github.com/EricGuo5513/HumanML3D.git
+[submodule "libs/OpenTMA"]
+	path = libs/OpenTMA
+	url = https://github.com/RobinWitch/OpenTMA.git

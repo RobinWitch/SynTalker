@@ -42,11 +42,11 @@ class CustomDataset(Dataset):
         self.unit_length = 4
         min_motion_len = args.pose_length
 
-        motion_dir = './datasets/HumanML3D/new_joint_vecs'
-        text_dir = './datasets/HumanML3D/texts'
+        motion_dir = './process_h3d_amass/HumanML3D/new_joint_vecs'
+        text_dir = './process_h3d_amass/HumanML3D/texts'
         data_dict = {}
         id_list = []            
-        split_file = f'./datasets/HumanML3D/{loader_type}.txt'
+        split_file = f'./process_h3d_amass/HumanML3D/{loader_type}.txt'
         
         
         with cs.open(split_file, 'r') as f:

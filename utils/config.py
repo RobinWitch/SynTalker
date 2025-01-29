@@ -66,7 +66,8 @@ def parse_args(config_path=None):
     parser.add("--prompt_scale",default=1.0,type=float)    
     parser.add("--tmr_mean_pose_path", default="/datasets/trinity/train/", type=str)
     parser.add("--tmr_std_pose_path", default="/datasets/trinity/train/", type=str)
-    
+    parser.add("--tmr_base_path",default="./ckpt/beatx_1-30_amass_h3d_tmr", type=str)
+
     # ------------------- evaluation ----------------------- #
     parser.add("--test_ckpt", default="/datasets/beat_cache/beat_4english_15_141/last.bin")
     parser.add("--eval_model", default="vae", type=str)

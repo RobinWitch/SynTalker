@@ -342,7 +342,7 @@ class CustomDataset(Dataset):
             elif "h3d623" in self.args.pose_rep:
                 pose_file = pose_file.replace("bvh", "npz").replace("h3d623","smplxflame_30")
                 pose_data = np.load(pose_file, allow_pickle=True)
-                npy_path = f"/mnt/fu09a/chenbohong/PantoMatrix/scripts/EMAGE_2024/h3d/HumanML3D/new_joint_vecs/{f_name}.npy"
+                npy_path = f"./process_h3d_beatx/HumanML3D/new_joint_vecs/{f_name}.npy"
                 if not os.path.exists(npy_path):
                     logger.info(colored(f"# ---- not exist {npy_path} ---- #", "red"))
                     continue

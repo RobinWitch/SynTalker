@@ -21,7 +21,7 @@ target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.
 - [x] Training scripts (include training rvqvae and diffusion)
 - [x] A web demo (We strongly suggest you to try it!)
 - [x] Our syntalker can recieve both speech and text input simultaneously
-- [ ] Training scripts (include data preprocessing, training rvqvae, text-motion alignspace and diffusion)
+- [x] Training scripts (include data preprocessing, training rvqvae, text-motion alignspace and diffusion)
 
 # 💖 Online Demo
 Thank Hugging Face🤗 for providing us GPU! Feel free to exprience our online [web demo](https://huggingface.co/spaces/robinwitch/SynTalker)!
@@ -36,6 +36,8 @@ conda create -n syntalker python=3.12
 conda activate syntalker
 pip install -r requirements.txt
 bash demo/install_mfa.sh
+git submodule update --init --recursive
+git submodule update --remote --recursive
 ```
 
 
@@ -128,7 +130,7 @@ The path of the generated motion npy file, the rendered video file, and the audi
 
 If you want to further convert it into a npz file format that can be imported into Blender for visualization, you can proceed as follows:
 
-First you should install submodules,
+Make sure you have installed submodules,
 ```
 git submodule update --init --recursive
 git submodule update --remote --recursive
@@ -141,7 +143,7 @@ For example:
 ```
 python libs/human_body_prior/tutorials/mdm_motion2smpl.py --input ./outputs/audio2pose/test/custom/1128_151129_diffusion_h3d/999/rec_0_prompt.npy --output your_file_name.npz
 ```
-## Training (TO DO)
+## Training
 
 ### 1. Datapreprocess
 We need to download AMASS datasets(both smlph and smplx format) from https://amass.is.tue.mpg.de/
@@ -158,9 +160,15 @@ Following [SMPLX_FPS_Correction.ipynb](preprocess/SMPLX_FPS_Correction.ipynb) to
 
 ### 3. Get HumanML3D Representation
 
-Enter the `amass_h3d` folder and execute `raw_pose_processing.ipynb`,`motion_representation.ipynb` in sequence.
 
-Enter the `beatx_h3d` folder and execute `raw_pose_processing.ipynb`,`motion_representation.ipynb`,`cal_mean_variance.ipynb` in sequence.
+1. Enter the `amass_h3d` folder and execute in sequence:
+   - [raw_pose_processing.ipynb](process_h3d_amass/raw_pose_processing.ipynb)
+   - [motion_representation.ipynb](process_h3d_amass/motion_representation.ipynb)
+
+2. Enter the `beatx_h3d` folder and execute in sequence:
+   - [raw_pose_processing.ipynb](process_h3d_beatx/raw_pose_processing.ipynb)
+   - [motion_representation.ipynb](process_h3d_beatx/motion_representation.ipynb)
+   - [cal_mean_variance.ipynb](process_h3d_beatx/cal_mean_variance.ipynb)
 
 ### 4. Train RVQVAE
 
@@ -180,9 +188,35 @@ python rvq_beatx_train.py --batch-size 256 --lr 2e-4 --total-iter 300000 --lr-sc
 ```
 
 ### 5. Train Text-Motion-Align-Space
-TODO in one month:
+You can refer to [OpenTMA](https://github.com/LinghaoChan/OpenTMA), [TMR](https://github.com/Mathux/TMR), or [MotionCLIP]() to train a Text-Motion-Align-Space.
 
-You can refer to [OpenTMA](https://github.com/LinghaoChan/OpenTMA) or [TMR](https://github.com/Mathux/TMR).
+We use `OpenTMA` as an example.
+
+```
+cp libs/HumanML3D/HumanML3D/*txt process_h3d_amass/HumanML3D
+
+unzip libs/HumanML3D/HumanML3D/texts.zip -d process_h3d_amass/HumanML3D
+
+ln -s $(pwd)/process_h3d_amass/HumanML3D/ libs/OpenTMA/datasets/humanml3d
+
+```
+After that, download the checkpoints from the [Google Drive](https://drive.google.com/drive/folders/1aWpJH4KTXsWnxG5MciLHXPXGBS7vWXf7?usp=share_link), put them in the `libs/OpenTMA/deps` folder, and unzip them.
+
+Make sure you `pytorch-lightning<2.0.0`, and train it:
+```
+cd libs/OpenTMA
+python -m train --cfg configs/configs_temos/H3D-TMR.yaml --cfg_assets configs/assets.yaml --nodebug
+```
+
+Then extract it:
+```
+python extract.py --epoch 299
+```
+you will get your ckpts in the folder `libs/OpenTMA/experiments/temos/H3D-TMR-v1/extract_weights`.
+
+Finally, you can set the `tmr_base_path` in `configs/diffusion_h3d.yaml`, then you will be able to use these ckpts in further processing.
+
+
 
 ### 6. Train Diffusion Model
 We also provide a data cache for training it. Data cache is only made up of data's HumanML3D representation, and not rely on RVQVAE and Text-Motion-Align-Space.

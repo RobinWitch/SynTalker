@@ -166,7 +166,7 @@ class CustomTrainer(train.BaseTrainer):
 
 
         modelpath = './ckpt/distilbert-base-uncased'
-        tmr_base_path = './ckpt/beatx_1-30_amass_h3d_tmr'
+        tmr_base_path = args.tmr_base_path
         textencoder = DistilbertActorAgnosticEncoder(modelpath, num_layers=4).eval().to(self.rank)
         textencoder.load_state_dict(torch.load(f'{tmr_base_path}/text_epoch=299.ckpt'))
         self.textencoder = textencoder
