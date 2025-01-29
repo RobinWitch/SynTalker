@@ -188,7 +188,7 @@ python rvq_beatx_train.py --batch-size 256 --lr 2e-4 --total-iter 300000 --lr-sc
 ```
 
 ### 5. Train Text-Motion-Align-Space
-You can refer to [OpenTMA](https://github.com/LinghaoChan/OpenTMA), [TMR](https://github.com/Mathux/TMR), or [MotionCLIP]() to train a Text-Motion-Align-Space.
+You can refer to [OpenTMA](https://github.com/LinghaoChan/OpenTMA), [TMR](https://github.com/Mathux/TMR), or [MotionCLIP](https://github.com/GuyTevet/MotionCLIP) to train a Text-Motion-Align-Space.
 
 We use `OpenTMA` as an example.
 
