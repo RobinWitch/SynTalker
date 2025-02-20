@@ -23,7 +23,7 @@ audio_scale: 1
 pose_norm: True
 tmr_mean_pose_path: ./mean_std/beatx_1-30_amass_h3d_mean.npy
 tmr_std_pose_path: ./mean_std/beatx_1-30_amass_h3d_std.npy
-tmr_base_path: /ckpt/beatx_1-30_amass_h3d_tmr
+tmr_base_path: ./ckpt/beatx_1-30_amass_h3d_tmr
 
 mean_pose_path: ./mean_std/beatx_1-30_amass_h3d_mean.npy
 std_pose_path: ./mean_std/beatx_1-30_amass_h3d_std.npy
