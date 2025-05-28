@@ -116,6 +116,7 @@ python train.py -c configs/diffusion_rvqvae_128.yaml
 python preprocess/download_hf.py
 cd ./datasets/beat_cache
 cat beatx_1-30_amass_h3d.zip.* > beatx_1-30_amass_h3d.zip
+unzip beat_smplx_en_emage_2_128.zip
 unzip beatx_1-30_amass_h3d.zip
 cd ../..
 ```
