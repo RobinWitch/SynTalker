@@ -27,5 +27,6 @@ fasttext
 pyrender
 trimesh
 imageio
-moviepy
+moviepy==1.0.3
 huggingface_hub
+pytorch_lightning

@@ -114,6 +114,10 @@ python train.py -c configs/diffusion_rvqvae_128.yaml
 ## Download models and datasets
 ```
 python preprocess/download_hf.py
+cd ./datasets/beat_cache
+cat beatx_1-30_amass_h3d.zip.* > beatx_1-30_amass_h3d.zip
+unzip beatx_1-30_amass_h3d.zip
+cd ../..
 ```
 
 ## Generate
